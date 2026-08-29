@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>من عشقي لـ نونه ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: #0b090a;
+            color: #f5f3f4;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* شاشة الباسورد */
+        #auth-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #160f13, #0b090a);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease;
+        }
+
+        .auth-box {
+            background: rgba(26, 18, 22, 0.85);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(226, 113, 148, 0.3);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            backdrop-filter: blur(10px);
+        }
+
+        .auth-box h2 {
+            color: #ff758c;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+
+        .auth-box p {
+            color: #d3d3d3;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+        .auth-box input {
+            width: 100%;
+            padding: 12px 20px;
+            border-radius: 30px;
+            border: 1px solid #ff758c;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 20px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .auth-box input:focus {
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 15px rgba(255, 117, 140, 0.4);
+        }
+
+        .auth-box button {
+            background: linear-gradient(135deg, #ff758c, #ff7eb3);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+        }
+
+        .auth-box button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 117, 140, 0.4);
+        }
+
+        .error-msg {
+            color: #ff4d4d;
+            font-size: 13px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        /* محتوى الموقع الأساسي */
+        #main-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        header {
+            text-align: center;
+            padding: 50px 20px;
+            background: radial-gradient(circle, #2b1720 0%, #0b090a 100%);
+            border-bottom: 1px solid rgba(255, 117, 140, 0.2);
+        }
+
+        header h1 {
+            font-size: 36px;
+            color: #ff758c;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #a4acb8;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        section {
+            margin-bottom: 60px;
+        }
+
+        section h2 {
+            font-size: 26px;
+            color: #ff7eb3;
+            margin-bottom: 25px;
+            border-right: 4px solid #ff758c;
+            padding-right: 15px;
+        }
+
+        /* شبكة الفيديوهات */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .video-card {
+            background: #160f13;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            transition: 0.3s;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 117, 140, 0.4);
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-top: 177.77%; /* نسبة أبعاد Shorts */
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* شبكة الصور */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 15px;
+        }
+
+        .photo-card {
+            border-radius: 15px;
+            overflow: hidden;
+            height: 250px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: 0.3s;
+            background: #160f13;
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 0.5s;
+        }
+
+        .photo-card:hover img {
+            transform: scale(1.08);
+        }
+
+        .photo-card:hover {
+            border-color: #ff758c;
+            box-shadow: 0 10px 25px rgba(255, 117, 140, 0.3);
+        }
+
+        /* قسم العداد وكلام الحب */
+        .love-section {
+            background: linear-gradient(145deg, #181015, #120c10);
+            border: 1px solid rgba(255, 117, 140, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+        }
+
+        .counter-box {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .time-unit {
+            background: rgba(255, 117, 140, 0.1);
+            border: 1px solid rgba(255, 117, 140, 0.3);
+            padding: 15px 20px;
+            border-radius: 12px;
+            min-width: 90px;
+        }
+
+        .time-unit span {
+            display: block;
+            font-size: 28px;
+            font-weight: 900;
+            color: #ff758c;
+        }
+
+        .time-unit label {
+            font-size: 13px;
+            color: #b0b0b0;
+        }
+
+        .love-message {
+            font-size: 17px;
+            line-height: 2.2;
+            color: #eaeaea;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: justify;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            border-radius: 15px;
+            border-right: 4px solid #ff758c;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            font-size: 13px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- شاشة كلمة المرور -->
+    <div id="auth-screen">
+        <div class="auth-box">
+            <h2>🔒 صفحة خاصة جداً</h2>
+            <p>أدخلي كلمة المرور للوصول لعالمنا الخاص يا نونه</p>
+            <input type="password" id="passcode-input" placeholder="اكتبي الباسورد هنا...">
+            <button onclick="checkPassword()">دخول للحياة ❤️</button>
+            <div id="error-msg" class="error-msg">كلمة المرور غير صحيحة، جربي تاني يا قلبي!</div>
+        </div>
+    </div>
+
+    <!-- محتوى الموقع -->
+    <div id="main-content">
+        <header>
+            <h1>إلى أغلى ما في حياتي.. نونه ❤️</h1>
+            <p>هنا عتبة عالمنا الخاص، حكاياتنا وذكرياتنا وكل لحظة حلوة جمعتنا</p>
+        </header>
+
+        <div class="container">
+            
+            <!-- قسم الفيديوهات -->
+            <section>
+                <h2>🎥 ذكرياتنا وضحكاتنا (Shorts)</h2>
+                <div class="video-grid">
+                    <!-- الفيديوهات المطلوبة -->
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/RlFGHKcCHYk" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/lBEu4jOJpfc" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/EcqiCZHbtEI" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/_dIudsngp4Y" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/oBXocJOwva4" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/iOSh_xCLrvA" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/B0aCdHpjlaY" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/nqQzQFBTGQ0" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/r4Uo6O6jBVg" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/7KtvdZye35g" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/0zD-7qnssoY" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/Hdz6khxHoTQ" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/KY5fyT8n2K4" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/bnBjsd-PlkQ" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/FncP_2N1p4g" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/I_-Q6y0_2ak" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/sbZvfyGVzrM" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/tpgXrdkwC3M" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/om0cuhuVLrc" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/RfJzXvq7U8I" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/2nf-HzlIaIk" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/S4H4hj9LTpo" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/0FppGSHi9fY" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/gMPtbA6MMMo" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/cSZCnHhtbIA" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/nLK1ucNGW0w" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/wBnjgEqnG2Y" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/pSdSj8xikc0" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/2YqdpLyyfsk" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/SGFsDzXV7JI" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/PwkLbQleGa8" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/C-FTbdXqRX4" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/MlOr2Lu2gsQ" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/M7W4JcCqT-U" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/FY5j3TFH69Q" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/W-pDrTVeP-Y" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/MZHYLxT96zI" allowfullscreen></iframe></div></div>
+                    <div class="video-card"><div class="video-container"><iframe src="https://www.youtube.com/embed/3P_eIVsBgyc" allowfullscreen></iframe></div></div>
+                </div>
+            </section>
+
+            <!-- قسم الصور -->
+            <section>
+                <h2>📸 صور القمر بتاعنا</h2>
+                <div class="photo-grid">
+                    <!-- الصور المطلوبة -->
+                    <div class="photo-card"><img src="https://i.postimg.cc/7CF2n3GQ/f5a23608.jpg" alt="صورة نونه" onerror="this.src='https://postimg.cc/7CF2n3GQ/f5a23608'"></div>
+                    <div class="photo-card"><img src="https://i.postimg.cc/Z9Gdx8BQ/a869ed4e.jpg" alt="صورة نونه"></div>
+                    <div class="photo-card"><img src="https://i.postimg.cc/p9wFJfh7/cc10235a.jpg" alt="صورة نونه"></div>
+                    <div class="photo-card"><img src="https://i.postimg.cc/2qsZ7Qbs/4d999be6.jpg" alt="صورة نونه"></div>
+                    <div class="photo-card"><img src="https://i.postimg.cc/d7byj2Zc/a417ca02.jpg" alt="صورة نونه"></div>
+                    <div class="photo-card"><img src="https://i.postimg.cc/Ny3Hk62w/0a929fd8.jpg" alt="صورة نونه"></div>
+                    <div class="photo-card"><img src="https://i.postimg.cc/cgf89vwk/5bffd45b.jpg" alt="صورة نونه"></div>
+                    <div class="photo-card"><img src="https://i.postimg.cc/Q9cW4F1n/83092234.jpg" alt="صورة نونه"></div>
+                    <div class="photo-card"><img src="https://i.postimg.cc/cgf89vfK/034c3658.jpg" alt="صورة نونه"></div>
+                    <div class="photo-card"><img src="https://i.postimg.cc/vgv581TP/528bbd47.jpg" alt="صورة نونه"></div>
+                    <div class="photo-card"><img src="https://i.postimg.cc/NL4xBnr2/8d117757.jpg" alt="صورة نونه"></div>
+                    <div class="photo-card"><img src="https://i.postimg.cc/HVk9xtQ5/228c24a1.jpg" alt="صورة نونه"></div>
+                    <div class="photo-card"><img src="https://i.postimg.cc/0by0QCpn/fddc801d.jpg" alt="صورة نونه"></div>
+                    <div class="photo-card"><img src="https://i.postimg.cc/YGtmPpRf/da7033d8.jpg" alt="صورة نونه"></div>
+                    <div class="photo-card"><img src="https://i.postimg.cc/sGXGVwtF/627d510f.jpg" alt="صورة نونه"></div>
+                    <div class="photo-card"><img src="https://i.postimg.cc/Jy5sZf8z/c65119e4.jpg" alt="صورة نونه"></div>
+                    <div class="photo-card"><img src="https://i.postimg.cc/Ny3Hk62w/0a929fd8.jpg" alt="صورة نونه"></div>
+                    <div class="photo-card"><img src="https://i.postimg.cc/cgf89vwk/5bffd45b.jpg" alt="صورة نونه"></div>
+                    <div class="photo-card"><img src="https://i.postimg.cc/2qsZ7Qbs/4d999be6.jpg" alt="صورة نونه"></div>
+                    <div class="photo-card"><img src="https://i.postimg.cc/18d29pKG/image.jpg" alt="صورة نونه"></div>
+                    <div class="photo-card"><img src="https://i.postimg.cc/xkb7qcsh/image.jpg" alt="صورة نونه"></div>
+                    <div class="photo-card"><img src="https://i.postimg.cc/B81ytXhM/image.jpg" alt="صورة نونه"></div>
+                    <div class="photo-card"><img src="https://i.postimg.cc/HVBFNGcR/image.jpg" alt="صورة نونه"></div>
+                    <div class="photo-card"><img src="https://i.postimg.cc/3yD6WdSK/image.jpg" alt="صورة نونه"></div>
+                    <div class="photo-card"><img src="https://i.postimg.cc/VrQhtmp4/image.jpg" alt="صورة نونه"></div>
+                    <div class="photo-card"><img src="https://i.postimg.cc/cgRbMPGX/image.jpg" alt="صورة نونه"></div>
+                    <div class="photo-card"><img src="https://i.postimg.cc/18d29pKN/image.jpg" alt="صورة نونه"></div>
+                    <div class="photo-card"><img src="https://i.postimg.cc/G4fVckjy/image.jpg" alt="صورة نونه"></div>
+                    <div class="photo-card"><img src="https://i.postimg.cc/xX8BDsLG/image.jpg" alt="صورة نونه"></div>
+                    <div class="photo-card"><img src="https://i.postimg.cc/VJv2Q7XX/image.jpg" alt="صورة نونه"></div>
+                </div>
+            </section>
+
+            <!-- قسم العداد وكلام الحب الصادق -->
+            <section>
+                <div class="love-section">
+                    <h2>⏳ حكايتنا بالثانية من يوم ما التقينا (10-5-2026)</h2>
+                    <div class="counter-box" id="love-counter">
+                        <div class="time-unit"><span id="days">0</span><label>يوم</label></div>
+                        <div class="time-unit"><span id="hours">0</span><label>ساعة</label></div>
+                        <div class="time-unit"><span id="minutes">0</span><label>دقيقة</label></div>
+                        <div class="time-unit"><span id="seconds">0</span><label>ثانية</label></div>
+                    </div>
+
+                    <div class="love-message">
+                        انتي احلي صدفه ي نونه ربنا بعتهالي في حياتي، انتي فعلا متتعوضيش، عايزك معايا علي طول بقيت حياتي كلها، عايز متحرمش منك ابدا ي نونه علشان الحياه من غيرك مش حياه وعمري ماهعرف اكمل حياتي من غيرك. انا خلاص حياتي وعمري ليكي وعمري مايهون زعلك عليا ابدا، وعايزك مبسوطه علي طول وأحسن واحده في الدنيا.<br><br>
+                        انا بوعدك إن عمري ماهستغني عنك ابدا ي نونه، وياريت انتي كمان متستغنيش عني علشان انتي بالنسبه ليا النفس الي داخل وخارج في حياتي، لو خسرتك يبقا كدا انا إنسان ميت من غيرك. انتي حلوه اوي وقمر وجدعه وبنت أصول، كل حاجه بتعمليها معايا وبتقفي جمبي كتير دا كله مش ناسيه، يكفي عليا انك معايا كدا في حياتي أكتر حاجه فرحتني في حياتي من ساعه ماتولدت، عمري مافرحت ولا حبيت حد من قلبي كدا ❤️
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <footer>
+            مصنوع بحب كبير علشان عيون نونه ❤️
+        </footer>
+    </div>
+
+    <script>
+        // التحقق من كلمة المرور المطلوبة
+        function checkPassword() {
+            const inputVal = document.getElementById('passcode-input').value.trim();
+            const correctPass = "10-4-2026"; // الباسورد المطلوب
+
+            if (inputVal === correctPass) {
+                const authScreen = document.getElementById('auth-screen');
+                const mainContent = document.getElementById('main-content');
+                
+                authScreen.style.opacity = '0';
+                setTimeout(() => {
+                    authScreen.style.display = 'none';
+                    mainContent.style.display = 'block';
+                    setTimeout(() => {
+                        mainContent.style.opacity = '1';
+                    }, 50);
+                }, 800);
+            } else {
+                const errorMsg = document.getElementById('error-msg');
+                errorMsg.style.display = 'block';
+            }
+        }
+
+        // حساب الوقت منذ 10-5-2026
+        const startDate = new Date('2026-05-10T00:00:00');
+
+        function updateCounter() {
+            const now = new Date();
+            const diff = now - startDate;
+
+            if (diff > 0) {
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                document.getElementById('days').innerText = days;
+                document.getElementById('hours').innerText = hours;
+                document.getElementById('minutes').innerText = minutes;
+                document.getElementById('seconds').innerText = seconds;
+            }
+        }
+
+        setInterval(updateCounter, 1000);
+        updateCounter();
+    </script>
+</body>
+</html>
+
